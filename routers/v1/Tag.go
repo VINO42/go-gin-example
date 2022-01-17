@@ -59,7 +59,7 @@ func GetTags(c *gin.Context) {
 	})
 }
 
-// 接收postbody json请求
+// 接收postbody json请求 https://www.cnblogs.com/devhg/p/12776270.html
 func AddTag(c *gin.Context) {
 	var t models.Tag
 	if c.Bind(&t) == nil {

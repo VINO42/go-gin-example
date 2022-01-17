@@ -1,0 +1,10 @@
+POST /api/v1/editTag HTTP/1.1
+Host: 127.0.0.1:8000
+Content-Type: application/json
+Content-Length: 83
+
+{
+  "id": 5,
+  "name": "电影哈哈",
+  "modified_by": "vino",
+  "state": 1

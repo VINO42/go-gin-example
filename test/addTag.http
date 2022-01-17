@@ -1,0 +1,11 @@
+POST /api/v1/addTag HTTP/1.1
+Host: 127.0.0.1:8000
+Content-Type: application/json
+Content-Length: 94
+
+{
+  "name": "电影",
+  "created_by": "vino",
+  "modified_by": "vino",
+  "state": 1
+}

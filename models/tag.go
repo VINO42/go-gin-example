@@ -5,7 +5,7 @@ type Tag struct {
 	Name       string `json:"name"`
 	CreatedBy  string `json:"created_by"`
 	ModifiedBy string `json:"modified_by"`
-	State      int    `json:"stage"`
+	State      int    `json:"state"`
 }
 
 /*
@@ -43,14 +43,24 @@ func EditTag(id int, data interface{}) bool {
 
 func DeleteTag(id int) bool {
 	data := make(map[string]interface{})
-	data["state"] = "1"
+	data["state"] = "0"
 	db.Model(&Tag{}).Where("id = ?", id).Updates(data)
 	return true
 }
 
 func ExistTagByName(name string) bool {
 	var tag Tag
-	db.Select("id").Where("name = ?", name).Where("state = ?","1").First(&tag)
+	db.Select("id").Where("name = ?", name).Where("state = ?", "1").First(&tag)
+	if tag.ID > 0 {
+		return true
+	}
+
+	return false
+}
+
+func ExistTagByID(id int) bool {
+	var tag Tag
+	db.Select("id").Where("id = ?", id).Where("state = ?", "1").First(&tag)
 	if tag.ID > 0 {
 		return true
 	}

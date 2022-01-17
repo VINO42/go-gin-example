@@ -1,20 +1,20 @@
 package setting
 
 import (
+	"github.com/go-ini/ini"
 	"log"
 	"time"
-	"github.com/go-ini/ini"
 )
 
 var (
-	Cfg *ini.File
+	Cfg     *ini.File
 	RunMode string
 
-	HTTPPort int
-	ReadTimeout time.Duration
+	HTTPPort     int
+	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
 
-	PageSize int
+	PageSize  int
 	JwtSecret string
 )
 
@@ -42,7 +42,7 @@ func LoadServer() {
 
 	HTTPPort = sec.Key("HTTP_PORT").MustInt(8000)
 	ReadTimeout = time.Duration(sec.Key("READ_TIMEOUT").MustInt(60)) * time.Second
-	WriteTimeout =  time.Duration(sec.Key("WRITE_TIMEOUT").MustInt(60)) * time.Second
+	WriteTimeout = time.Duration(sec.Key("WRITE_TIMEOUT").MustInt(60)) * time.Second
 }
 
 func LoadApp() {

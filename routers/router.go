@@ -13,12 +13,11 @@ func InitRouter() *gin.Engine {
 	gin.SetMode(setting.RunMode)
 	apiV1 := r.Group("/api/v1")
 	{
-		apiV1.GET("tag/:id",v1.GetTag)
-		apiV1.GET("tags",v1.GetTags)
-		apiV1.POST("addTag",v1.AddTag)
-		apiV1.POST("editTag/:id",v1.EditTag)
-		apiV1.POST("deleteTag/:id",v1.DeleteTag)
-
+		apiV1.GET("tag/:id", v1.GetTag)
+		apiV1.GET("tags", v1.GetTags)
+		apiV1.POST("addTag", v1.AddTag)
+		apiV1.POST("editTag", v1.EditTag)
+		apiV1.DELETE("tag/:id", v1.DeleteTag)
 
 		apiV1.GET("/article/:id", v1.GetArticle)
 		apiV1.GET("/articles/:id", v1.GetArticles)

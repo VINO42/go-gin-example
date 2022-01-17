@@ -11,7 +11,7 @@
  Target Server Version : 80021
  File Encoding         : 65001
 
- Date: 11/11/2021 23:34:52
+ Date: 17/01/2022 22:56:08
 */
 
 SET NAMES utf8mb4;
@@ -49,7 +49,7 @@ CREATE TABLE `blog_auth`  (
   `username` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '账号',
   `password` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '密码',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of blog_auth
@@ -70,10 +70,13 @@ CREATE TABLE `blog_tag`  (
   `deleted_on` int(0) UNSIGNED NULL DEFAULT 0,
   `state` tinyint(0) UNSIGNED NULL DEFAULT 1 COMMENT '状态 0为禁用、1为启用',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文章标签管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文章标签管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of blog_tag
 -- ----------------------------
+INSERT INTO `blog_tag` VALUES (3, '体育', 0, 'vino', 0, '', 0, 0);
+INSERT INTO `blog_tag` VALUES (4, '文化', 0, 'vino', 0, '', 0, 1);
+INSERT INTO `blog_tag` VALUES (5, '电影哈哈', 0, 'vino', 0, 'vino', 0, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;

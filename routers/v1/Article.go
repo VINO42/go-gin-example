@@ -87,48 +87,59 @@ func GetArticles(c *gin.Context) {
 
 //新增文章
 func AddArticle(c *gin.Context) {
-	tagId := com.StrTo(c.Query("tag_id")).MustInt()
-	title := c.Query("title")
-	desc := c.Query("desc")
-	content := c.Query("content")
-	createdBy := c.Query("created_by")
-	state := com.StrTo(c.DefaultQuery("state", "0")).MustInt()
+	var art models.Article
+	if c.Bind(&art) == nil {
+		tagId := art.TagID
+		title := art.Title
+		desc := art.Desc
+		content := art.Content
+		createdBy := art.CreatedBy
+		state := art.State
 
-	valid := validation.Validation{}
-	valid.Min(tagId, 1, "tag_id").Message("标签ID必须大于0")
-	valid.Required(title, "title").Message("标题不能为空")
-	valid.Required(desc, "desc").Message("简述不能为空")
-	valid.Required(content, "content").Message("内容不能为空")
-	valid.Required(createdBy, "created_by").Message("创建人不能为空")
-	valid.Range(state, 0, 1, "state").Message("状态只允许0或1")
+		valid := validation.Validation{}
+		valid.Min(tagId, 1, "tag_id").Message("标签ID必须大于0")
+		valid.Required(title, "title").Message("标题不能为空")
+		valid.Required(desc, "desc").Message("简述不能为空")
+		valid.Required(content, "content").Message("内容不能为空")
+		valid.Required(createdBy, "created_by").Message("创建人不能为空")
+		valid.Range(state, 0, 1, "state").Message("状态只允许0或1")
 
-	code := e.INVALID_PARAMS
-	if !valid.HasErrors() {
-		if models.ExistTagByID(tagId) {
-			data := make(map[string]interface{})
-			data["tag_id"] = tagId
-			data["title"] = title
-			data["desc"] = desc
-			data["content"] = content
-			data["created_by"] = createdBy
-			data["state"] = state
+		code := e.INVALID_PARAMS
+		if !valid.HasErrors() {
+			if models.ExistTagByID(tagId) {
+				data := make(map[string]interface{})
+				data["tag_id"] = tagId
+				data["title"] = title
+				data["desc"] = desc
+				data["content"] = content
+				data["created_by"] = createdBy
+				data["state"] = state
 
-			models.AddArticle(data)
-			code = e.SUCCESS
+				models.AddArticle(data)
+				code = e.SUCCESS
+			} else {
+				code = e.ERROR_NOT_EXIST_TAG
+			}
 		} else {
-			code = e.ERROR_NOT_EXIST_TAG
+			for _, err := range valid.Errors {
+				log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+			}
 		}
-	} else {
-		for _, err := range valid.Errors {
-			log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
-		}
-	}
 
+		c.JSON(http.StatusOK, gin.H{
+			"code": code,
+			"msg":  e.GetMsg(code),
+			"data": make(map[string]interface{}),
+		})
+		return
+	}
+	code := e.INVALID_PARAMS
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg":  e.GetMsg(code),
 		"data": make(map[string]interface{}),
 	})
+
 }
 
 //修改文章

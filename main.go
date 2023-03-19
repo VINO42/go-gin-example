@@ -20,6 +20,6 @@ func main() {
 		WriteTimeout:   setting.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
-	zlog.Info("starting server....   ")
+	zlog.Info("starting server....   at port %d", setting.HTTPPort)
 	s.ListenAndServe()
 }

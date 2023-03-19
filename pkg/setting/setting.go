@@ -10,6 +10,7 @@ var (
 	Cfg     *ini.File
 	RunMode string
 	LogHome string
+	LogName string
 
 	HTTPPort     int
 	ReadTimeout  time.Duration
@@ -25,7 +26,7 @@ func init() {
 	if err != nil {
 		log.Fatalf("Fail to parse 'conf/app.ini': %v", err)
 	}
-	LoadLogHome()
+	LoadLog()
 	LoadBase()
 	LoadServer()
 	LoadApp()
@@ -34,8 +35,10 @@ func init() {
 func LoadBase() {
 	RunMode = Cfg.Section("").Key("RUN_MODE").MustString("debug")
 }
-func LoadLogHome() {
-	RunMode = Cfg.Section("log").Key("LOG_HOME").MustString("./")
+func LoadLog() {
+	LogHome = Cfg.Section("log").Key("LOG_HOME").MustString("./")
+	LogName = Cfg.Section("log").Key("LOG_NAME").MustString("gin.log")
+
 }
 
 func LoadServer() {

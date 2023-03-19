@@ -6,20 +6,20 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"
-	"path"
-	"runtime"
 )
 
-var logger *zap.Logger
+var logger *zap.SugaredLogger
 
 func init() {
 	encoderConfig := zap.NewProductionEncoderConfig()
 	// set time format
 	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 	// set log codec -> json
-	encoder := zapcore.NewJSONEncoder(encoderConfig)
+	//encoder := zapcore.NewJSONEncoder(encoderConfig)
+	// set to nomarl log encod
+	encoder := zapcore.NewConsoleEncoder(encoderConfig)
 
-	file, _ := os.OpenFile(setting.LogHome, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 644)
+	file, _ := os.OpenFile(setting.LogHome+"/"+setting.LogName, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 644)
 	fileWriterSyncer := zapcore.AddSync(file)
 
 	core := zapcore.NewTee(
@@ -29,14 +29,19 @@ func init() {
 		zapcore.NewCore(encoder, fileWriterSyncer, zapcore.DebugLevel),
 	)
 
-	logger = zap.New(core)
+	logger = zap.New(core, zap.AddCaller()).Sugar()
 }
 
 // log rotate
 func getFileLogWriter() (writeSyncer zapcore.WriteSyncer) {
 	// use lumberjack to rotate
+	//Filename: 日志文件的位置
+	//MaxSize：在进行切割之前，日志文件的最大大小（以 MB 为单位）
+	//MaxBackups：保留旧文件的最大个数
+	//MaxAges：保留旧文件的最大天数
+	//Compress：是否压缩 / 归档旧文件
 	lumberJackLogger := &lumberjack.Logger{
-		Filename:   "D:\\demo1\\src\\demo\\demo06\\zap-log\\logs\\zap.log",
+		Filename:   setting.LogHome + "/" + setting.LogName,
 		MaxSize:    10, // filesize, MB
 		MaxBackups: 7,  // >7, than rotate
 		MaxAge:     1,  // frequency, 1 day
@@ -45,39 +50,19 @@ func getFileLogWriter() (writeSyncer zapcore.WriteSyncer) {
 	return zapcore.AddSync(lumberJackLogger)
 }
 
-func Info(message string, fields ...zap.Field) {
-	callerFields := getCallerInfoForLog()
-	fields = append(fields, callerFields...)
-	logger.Info(message, fields...)
+func Info(message string, fields ...interface{}) {
+
+	logger.Infof(" | "+message, fields...)
 }
 
-func Debug(message string, fields ...zap.Field) {
-	callerFields := getCallerInfoForLog()
-	fields = append(fields, callerFields...)
-	logger.Debug(message, fields...)
+func Debug(message string, fields ...interface{}) {
+	logger.Debugf(" | "+message, fields...)
 }
 
-func Error(message string, fields ...zap.Field) {
-	callerFields := getCallerInfoForLog()
-	fields = append(fields, callerFields...)
-	logger.Error(message, fields...)
+func Error(message string, fields ...interface{}) {
+	logger.Errorf(" | "+message, fields...)
 }
 
-func Warn(message string, fields ...zap.Field) {
-	callerFields := getCallerInfoForLog()
-	fields = append(fields, callerFields...)
-	logger.Warn(message, fields...)
-}
-
-func getCallerInfoForLog() (callerFields []zap.Field) {
-
-	pc, file, line, ok := runtime.Caller(2) // 回溯两层，拿到写日志的调用方的函数信息
-	if !ok {
-		return
-	}
-	funcName := runtime.FuncForPC(pc).Name()
-	funcName = path.Base(funcName) //Base函数返回路径的最后一个元素，只保留函数名
-
-	callerFields = append(callerFields, zap.String("func", funcName), zap.String("file", file), zap.Int("line", line))
-	return
+func Warn(message string, fields ...interface{}) {
+	logger.Warnf(" | "+message, fields...)
 }

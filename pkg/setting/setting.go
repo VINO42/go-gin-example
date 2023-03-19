@@ -7,10 +7,11 @@ import (
 )
 
 var (
-	Cfg     *ini.File
-	RunMode string
-	LogHome string
-	LogName string
+	Cfg      *ini.File
+	RunMode  string
+	LogHome  string
+	LogName  string
+	LogLevel string
 
 	HTTPPort     int
 	ReadTimeout  time.Duration
@@ -38,6 +39,7 @@ func LoadBase() {
 func LoadLog() {
 	LogHome = Cfg.Section("log").Key("LOG_HOME").MustString("./")
 	LogName = Cfg.Section("log").Key("LOG_NAME").MustString("gin.log")
+	LogLevel = Cfg.Section("log").Key("LOG_LEVEL").MustString("debug")
 
 }
 

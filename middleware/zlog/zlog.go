@@ -13,12 +13,11 @@ var logger *zap.SugaredLogger
 func init() {
 	encoderConfig := zap.NewProductionEncoderConfig()
 	// set time format
-	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	encoderConfig.EncodeTime = zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05.000 |")
 	// set log codec -> json
 	//encoder := zapcore.NewJSONEncoder(encoderConfig)
 	// set to nomarl log encod
 	encoder := zapcore.NewConsoleEncoder(encoderConfig)
-
 	file, _ := os.OpenFile(setting.LogHome+"/"+setting.LogName, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 644)
 	fileWriterSyncer := zapcore.AddSync(file)
 

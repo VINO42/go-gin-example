@@ -69,8 +69,9 @@ func AddArticle(data map[string]interface{}) bool {
 }
 
 func DeleteArticle(id int) bool {
-	db.Where("id = ?", id).Delete(Article{})
-
+	data := make(map[string]interface{})
+	data["state"] = 0
+	db.Model(&Article{}).Where("id = ?", id).Update(data)
 	return true
 }
 

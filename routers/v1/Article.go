@@ -1,20 +1,18 @@
 package v1
 
 import (
-	"log"
-	"net/http"
-
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
-
 	"github.com/vino42/go-gin-example/models"
 	"github.com/vino42/go-gin-example/pkg/e"
 	"github.com/vino42/go-gin-example/pkg/setting"
 	"github.com/vino42/go-gin-example/pkg/util"
+	"log"
+	"net/http"
 )
 
-//获取单个文章
+// 获取单个文章
 func GetArticle(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt()
 
@@ -43,7 +41,7 @@ func GetArticle(c *gin.Context) {
 	})
 }
 
-//获取多个文章
+// 获取多个文章
 func GetArticles(c *gin.Context) {
 	data := make(map[string]interface{})
 	maps := make(map[string]interface{})
@@ -85,7 +83,7 @@ func GetArticles(c *gin.Context) {
 	})
 }
 
-//新增文章
+// 新增文章
 func AddArticle(c *gin.Context) {
 	var art models.Article
 	if c.Bind(&art) == nil {
@@ -142,7 +140,7 @@ func AddArticle(c *gin.Context) {
 
 }
 
-//修改文章
+// 修改文章
 func EditArticle(c *gin.Context) {
 	valid := validation.Validation{}
 
@@ -207,7 +205,7 @@ func EditArticle(c *gin.Context) {
 	})
 }
 
-//删除文章
+// 删除文章
 func DeleteArticle(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt()
 

@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-
+	"github.com/vino42/go-gin-example/middleware/zlog"
 	"github.com/vino42/go-gin-example/pkg/setting"
 	"github.com/vino42/go-gin-example/routers"
+	"net/http"
 )
 
 func main() {
 	//router := gin.Default()
+
 	router := routers.InitRouter()
 
 	s := &http.Server{
@@ -19,6 +20,6 @@ func main() {
 		WriteTimeout:   setting.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
-
+	zlog.Info("starting server....   ")
 	s.ListenAndServe()
 }

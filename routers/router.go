@@ -2,7 +2,9 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/vino42/go-gin-example/middleware"
 	"github.com/vino42/go-gin-example/pkg/setting"
+	"github.com/vino42/go-gin-example/routers/api"
 	"github.com/vino42/go-gin-example/routers/v1"
 )
 
@@ -11,8 +13,13 @@ func InitRouter() *gin.Engine {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	gin.SetMode(setting.RunMode)
+	r.GET("/auth", api.GetAuth)
+
 	apiV1 := r.Group("/api/v1")
+	apiV1.Use(middleware.JWT())
+
 	{
+
 		apiV1.GET("tag/:id", v1.GetTag)
 		apiV1.GET("tags", v1.GetTags)
 		apiV1.POST("addTag", v1.AddTag)
